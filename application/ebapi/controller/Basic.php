@@ -39,6 +39,7 @@ class Basic extends Controller
         $check =$this->checkAuth();
         //获取token
         $token =$this->getRequestToken();
+
         if(!$token && $check===false) $this->fail('请传入token验证您的身份信息');
         //验证token
         $Tokencheck=TokenService::checkToken($token,$check);
@@ -155,12 +156,15 @@ class Basic extends Controller
         if(method_exists($className,'whiteList')){
             try{
                 //执行白名单方法获取白名单
+
                 $white=$className::whiteList();
                 if(!is_array($white)) return false;
                 foreach ($white as $actionWhite){
                     //比较白名单和当前访问方法
-                    if($this->getAuthName($actionWhite,$controller,$module)==$this->getAuthName($action,$controller,$module))
+                    if(trim($actionWhite)==trim($action)){
                         return true;
+                    }
+
                 }
             }catch (\Exception $e){}
         }

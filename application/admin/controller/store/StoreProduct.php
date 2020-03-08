@@ -137,8 +137,6 @@ class StoreProduct extends AuthController
      */
     public function create()
     {
-        //        $this->assign(['title'=>'添加产品','action'=>Url::build('save'),'rules'=>$this->rules()->getContent()]);
-        //        return $this->fetch('public/common_form');
         $field = [
             Form::select('mer_id', '所属店铺')->setOptions(function () {
                 $list = MerchantModel::where(['status' => '1'])->select();

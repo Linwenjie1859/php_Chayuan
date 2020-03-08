@@ -11,6 +11,12 @@ use think\Model;
 
 trait ModelTrait
 {
+
+    public static function selectByfield($field_val,$by_field=null,$field="*"){
+        $model = new self;
+        return $model->where($by_field,$field_val)->field($field)->select();
+    }
+
     /**
      * 添加一条数据
      * @param $data

@@ -6,8 +6,8 @@ use app\core\model\system\SystemUserLevel;
 use app\core\model\system\SystemUserTask;
 use app\ebapi\model\article\Article;
 use app\core\model\user\UserLevel;
-use app\ebapi\model\store\StoreCategory;
 use app\core\model\routine\RoutineFormId;//待完善
+use app\ebapi\model\scenic\ScenicCategory;
 use app\ebapi\model\store\StoreCouponIssue;
 use app\ebapi\model\store\StoreProduct;
 use app\core\util\GroupDataService;
@@ -16,7 +16,6 @@ use service\JsonService;
 use app\core\util\SystemConfigService;
 use service\UploadService;
 use service\UtilService;
-use service\CacheService;
 use think\Cache;
 
 /**
@@ -102,11 +101,12 @@ class PublicApi extends AuthController
         $info['goodsTitle'] = SystemConfigService::get('sales_info');//TODO 茶叶商品标题
 
         $teaTreeNumber = (int)SystemConfigService::get('fast_number');//TODO 茶树列表显示个数.6
-        $viewNumber = (int)SystemConfigService::get('bast_number');//TODO 景区列表显示个数，6
+        $viewNumber = (int)SystemConfigService::get('bast_number');//TODO 景区列表显示个数，5
         $goodsNumber = (int)SystemConfigService::get('first_number');//TODO 茶叶商品显示个数，6
         $articleNumber = (int)SystemConfigService::get('article_number');//TODO 文章显示个数，6
 
         $info['teaTreeList'] = StoreProduct::getOtherProduct('',$teaTreeNumber,0,$this->uid);//TODO   茶树列表信息
+        $info['viewList'] =  ScenicCategory::getViewScenic('id,image,intr,title',$viewNumber);//TODO   景区列表信息
 
         $info['goodsList'] = StoreProduct::getBestProduct('',$goodsNumber,0,$this->uid);//TODO 茶叶商品列表信息
         $info['articleList']=Article::getArticleListHot('',$articleNumber);  //TODO 最新文章列表信息
@@ -115,7 +115,7 @@ class PublicApi extends AuthController
 
         $likeInfo = StoreProduct::getHotProduct('id,image,store_name,cate_id,price,unit_name,sort',3);//TODO 热门榜单 猜你喜欢
         $couponList=StoreCouponIssue::getIssueCouponList($this->uid,3);
-        return $this->successful(compact('banner','menus','roll','info','activity','article_menus','article_category','likeInfo','logoUrl','couponList'));
+        return $this->successful(compact('banner','menus','roll','info','activity','article_menus','likeInfo','couponList'));
     }
 
     /**

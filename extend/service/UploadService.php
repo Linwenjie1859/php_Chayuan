@@ -68,6 +68,7 @@ class UploadService
      */
     protected static function validDir($dir)
     {
+//        var_dump($dir);
         return is_dir($dir) == true || mkdir($dir,0777,true) == true;
     }
 

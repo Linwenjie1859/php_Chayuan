@@ -171,22 +171,24 @@ class Login extends Controller
     }
 
     /**
-     * 获取登录验证码
+     * 获取手机验证码用于修改密码
      * @param Request $request
      */
-    public function get_login_code(Request $request){
+    public function get_update_pass_code(Request $request){
+    
         $userInfo = UtilService::postMore([
             ['phone',''],
         ],$request);//获取前台传的code
         if(!$userInfo['phone']) return JsonService::fail('请输入手机号');
 
         $code = rand(100000,999999);
-        SmsService::sendSms(['code'=>$code],$userInfo['phone'],'32');
+        SendTemplateSMS::sendTemplateSMS($userInfo['phone'],array($code,3),1);
 
-        cache("login".$userInfo['phone'],$code,300);
-
+        cache("updatepass".$userInfo['phone'],$code,3000);
         return JsonService::successful('发送成功！');
     }
+
+
 
     /**
      * App登录
@@ -250,5 +252,6 @@ class Login extends Controller
         if (!$encryptData) return JsonService::fail('encryptData参数错误');
         return MiniProgramService::encryptor($session, $iv, $encryptData);
     }
+
 
 }

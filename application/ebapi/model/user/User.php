@@ -227,6 +227,14 @@ class User extends ModelBasic
     {
         return self::edit(['avatar'=>$avatar,'nickname'=>$nickname],$uid,'uid');
     }
+
+
+    public static function editUserPassword($phone,$pwd)
+    {
+        return self::edit(['pwd'=>$pwd],$phone,'phone');
+    }
+
+
     /**
      * TODO 获取推广人数 一级
      * @param int $uid
@@ -292,5 +300,10 @@ class User extends ModelBasic
         $list = $model->select();
         if($list) return $list->toArray();
         else return [];
+    }
+
+    public static function getUserInfoByPhone($phone,$fields='*'){
+        $model = new self;
+        return $model->where("phone",$phone)->field($fields)->find();
     }
 }

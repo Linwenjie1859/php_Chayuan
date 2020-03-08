@@ -15,7 +15,6 @@ class ArticleApi extends Basic
 
     public function get_article_index(){
         $cateInfo = ArticleCategory::getArticleIndex();
-
         return $this->successful($cateInfo);
     }
 
@@ -76,4 +75,7 @@ class ArticleApi extends Basic
         ArticleModel::edit(['visit'=>$content["visit"]],$id);//增加浏览次数
         return $this->successful($content);
     }
+
+
+
 }

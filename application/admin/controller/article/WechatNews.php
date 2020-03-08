@@ -7,7 +7,7 @@ use service\UtilService as Util;
 use service\JsonService as Json;
 use service\UploadService as Upload;
 use think\Request;
-use app\admin\model\article\ArticleCategory as ArticleCategoryModel;
+use app\admin\model\article\ScenicCategory as ArticleCategoryModel;
 use app\admin\model\article\Article as ArticleModel;
 use app\admin\model\system\SystemAttachment;
 

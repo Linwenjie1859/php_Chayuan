@@ -42,6 +42,18 @@ use think\Db;
 class UserApi extends AuthController
 {
 
+    /*
+ * 白名单不验证token 如果传入token执行验证获取信息，没有获取到用户信息
+ * */
+    public static function whiteList()
+    {
+        return [
+            'check_phone_code',
+            'edit_user_pass'
+        ];
+    }
+
+
     /*get_user_order_list
      * 获取签到按月份查找
      * @param int $page 页码
@@ -652,6 +664,36 @@ class UserApi extends AuthController
             return JsonService::fail('');
     }
 
+    /**
+     * @describe    根据手机号码修改用户密码
+     * 2020/3/5 9:30
+     * @return
+     * @author Linwenjie
+     */
+	public function edit_user_pass(){
+        list($phone,$pwd)=UtilService::postMore([
+            ['phone',''],
+            ['pwd',''],
+        ],$this->request,true);
+        $md5_pwd = md5($pwd);
+        if(User::getUserInfoByPhone($phone,'pwd')['pwd']==$md5_pwd || User::editUserPassword($phone,$md5_pwd))
+            return JsonService::successful('修改成功');
+        else
+            return JsonService::fail('');
+	}
+
+	public function check_phone_code(){
+        list($phone,$code)=UtilService::postMore([
+            ['phone',''],
+            ['code',''],
+        ],$this->request,true);
+
+        if(cache("updatepass".$phone) == $code){
+            return JsonService::success('验证码认证成功！');
+        }else{
+            return JsonService::fail('验证码错误！');
+        }
+    }
     /*
      * 查找用户消费充值记录
      *
